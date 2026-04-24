@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
-
+# function to add time-based features
 def add_time_features(df):
     df['Year']      = df['Date Occurred'].dt.year
     df['Month']     = df['Date Occurred'].dt.month
@@ -10,6 +10,7 @@ def add_time_features(df):
     df['DayOfMonth']= df['Date Occurred'].dt.day
     df['IsWeekend'] = (df['DayOfWeek'] >= 5).astype(int)
 
+# function to add time-based features
     def time_bin(hour):
         if 0 <= hour < 6:     return 'Night'
         elif 6 <= hour < 12:  return 'Morning'
@@ -21,14 +22,14 @@ def add_time_features(df):
     df['Report_Delay_Days'] = df['Report_Delay_Days'].clip(0, 365)
     return df
 
-
+# function to add frequency-based features
 def add_frequency_encoding(df):
     df['Area_Crime_Frequency']    = df['Area ID'].map(df['Area ID'].value_counts())
     df['Premise_Crime_Frequency'] = df['Premise Code'].map(df['Premise Code'].value_counts())
     df['MO_Code_Count'] = df['MO Codes'].str.split().apply(lambda x: len(x) if isinstance(x, list) else 0)
     return df
 
-
+# function to add category-based features
 def add_crime_category(df):
     def categorize(desc):
         desc = str(desc).upper()
@@ -52,7 +53,7 @@ def add_crime_category(df):
     df['Crime_Category'] = df['Crime Code Description'].apply(categorize)
     return df
 
-
+# function to encode categorical features
 def encode_categoricals(df):
     cat_cols = ['Victim Sex', 'Victim Descent', 'Area Name',
                 'Premise Description', 'Weapon Description',
@@ -63,7 +64,7 @@ def encode_categoricals(df):
             df[col + '_Enc'] = le.fit_transform(df[col].astype(str))
     return df
 
-
+# function to run all feature engineering
 def run_all(df):
     df = add_time_features(df)
     df = add_frequency_encoding(df)

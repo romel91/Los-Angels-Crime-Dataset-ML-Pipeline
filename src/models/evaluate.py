@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, ConfusionMatrixDisplay
 
-
+# function to print classification report
 def print_report(y_test, y_pred, model_name):
     print(f'=== {model_name} ===')
     print(classification_report(y_test, y_pred))
 
-
+# function to plot confusion matrix
 def plot_confusion_matrix(y_test, y_pred, model_name):
     fig, ax = plt.subplots(figsize=(10, 8))
     ConfusionMatrixDisplay.from_predictions(
